@@ -148,7 +148,7 @@ def get_question_body(question_id):
             # print json.dumps(content, indent=4)
             question_body = process_question_body(content)
         else:
-            print res.status_code
+            print 'HTTP Error: {} reading question body'.format(res.status_code)
 
         return question_body
 
@@ -217,7 +217,7 @@ def main():
     :return:
     """
 
-    print '|Getting questions from Stackoverflow...|'
+    print '|Getting questions from Stackoverflow. Please wait...|'
     items = list()
     questions = get_questions()
     print '|Total questions: {} |'.format(len(questions))
@@ -231,7 +231,9 @@ def main():
     print '|Display information'
     for question in questions:
         item = Item()
-        item.text = question.title + ' ' + question.body_clean
+        if question.title and question.body_clean:
+            item.text = question.title + ' ' + question.body_clean
+
         if question.answers:
             for answer in question.answers:
                 item.text += ' ' + answer.body_clean
